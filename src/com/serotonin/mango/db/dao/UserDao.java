@@ -146,10 +146,6 @@ public class UserDao extends BaseDao {
             + "  receiveOwnAuditEvents=? " + "where id=?";
 
     void updateUser(User user) {
-        System.out.println(user.getUsername() + user.getPassword() + user.getEmail() + user.getPhone() +
-                boolToChar(user.isAdmin()) + boolToChar(user.isDisabled()) + user.getHomeUrl() +
-                String.valueOf(user.getReceiveAlarmEmails()) + boolToChar(user.isReceiveOwnAuditEvents()) +
-                String.valueOf(user.getId()));
         ejt.update(
                 USER_UPDATE,
                 new Object[] { user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(),
