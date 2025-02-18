@@ -38,6 +38,7 @@ import com.serotonin.mango.rt.RuntimeManager;
 import com.serotonin.mango.rt.dataImage.DataPointRT;
 import com.serotonin.mango.rt.dataImage.PointValueTime;
 import com.serotonin.mango.rt.dataImage.types.ImageValue;
+import com.serotonin.mango.rt.dataImage.types.NumericValue;
 import com.serotonin.mango.view.ShareUser;
 import com.serotonin.mango.vo.DataPointExtendedNameComparator;
 import com.serotonin.mango.vo.DataPointVO;
@@ -86,7 +87,8 @@ public class WatchListDwr extends BaseDwr {
      * @return
      */
     public List<WatchListState> getPointData() {
-        // Get the watch list from the user's session. It should have been set by the controller.
+        // Get the watch list from the user's session. It should have been set by the
+        // controller.
         return getPointDataImpl(Common.getUser().getWatchList());
     }
 
@@ -128,8 +130,7 @@ public class WatchListDwr extends BaseDwr {
         if (copyId == Common.NEW_ID) {
             watchList = new WatchList();
             watchList.setName(getMessage("common.newName"));
-        }
-        else {
+        } else {
             watchList = new WatchListDao().getWatchList(user.getSelectedWatchList());
             watchList.setId(Common.NEW_ID);
             watchList.setName(getMessage(new LocalizableMessage("common.copyPrefix", watchList.getName())));
@@ -178,7 +179,8 @@ public class WatchListDwr extends BaseDwr {
         user.setSelectedWatchList(watchListId);
 
         Map<String, Object> data = getWatchListData(user, watchList);
-        // Set the watchlist in the user object after getting the data since it may take a while, and the long poll
+        // Set the watchlist in the user object after getting the data since it may take
+        // a while, and the long poll
         // updates will all be missed in the meantime.
         user.setWatchList(watchList);
 
@@ -203,7 +205,8 @@ public class WatchListDwr extends BaseDwr {
         updateSetPermission(point, watchList.getUserAccess(user), new UserDao().getUser(watchList.getUserId()));
 
         // Return the watch list state for it.
-        return createWatchListState(request, point, Common.ctx.getRuntimeManager(), new HashMap<String, Object>(), user);
+        return createWatchListState(request, point, Common.ctx.getRuntimeManager(), new HashMap<String, Object>(),
+                user);
     }
 
     public void removeFromWatchList(int pointId) {
@@ -275,10 +278,16 @@ public class WatchListDwr extends BaseDwr {
         if (pointValue != null && pointValue.getValue() instanceof ImageValue) {
             // Text renderers don't help here. Create a thumbnail.
             setImageText(request, state, pointVO, model, pointValue);
+        } else {
+            // Change Request #1 Implemented
+            if (pointValue != null && pointValue.getValue() instanceof NumericValue) {
+                double truncatedValue = Math.floor(((NumericValue) pointValue.getValue()).getDoubleValue() * 100)
+                        / 100.0;
+                state.setValue(String.valueOf(truncatedValue)); // Override final value
+            } else {
+                setPrettyText(state, pointVO, model, pointValue);
+            }
         }
-        else
-            setPrettyText(state, pointVO, model, pointValue);
-
         if (pointVO.isSettable())
             setChange(pointVO, state, point, request, model, user);
 
