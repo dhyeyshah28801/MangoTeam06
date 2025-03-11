@@ -46,7 +46,7 @@ public class MBusDiscovery implements MasterEventListener, TestingUtility {
             String phonenumber, int baudrate, int flowControlIn, int flowcontrolOut, int dataBits, int stopBits,
             int parity, int firstPrimaryAddress, int lastPrimaryAddress) {
         MBusDiscovery result = new MBusDiscovery(resourceBundle, commPortId, phonenumber, MBusAddressing.PRIMARY,
-                baudrate, flowControlIn, flowcontrolOut, dataBits, stopBits, parity);
+                baudrate);
         result.firstPrimaryAddress = firstPrimaryAddress;
         result.lastPrimaryAddress = lastPrimaryAddress;
         result.searchThread.start();
@@ -57,7 +57,7 @@ public class MBusDiscovery implements MasterEventListener, TestingUtility {
             String phonenumber, int baudrate, int flowControlIn, int flowcontrolOut, int dataBits, int stopBits,
             int parity) {
         MBusDiscovery result = new MBusDiscovery(resourceBundle, commPortId, phonenumber, MBusAddressing.SECONDARY,
-                baudrate, flowControlIn, flowcontrolOut, dataBits, stopBits, parity);
+                baudrate);
         result.searchThread.start();
         return result;
     }
@@ -129,7 +129,7 @@ public class MBusDiscovery implements MasterEventListener, TestingUtility {
      * @param parity
      */
     private MBusDiscovery(ResourceBundle bundle, String comPortId, String phonenumber, MBusAddressing mBusAddressing,
-            int baudrate, int flowControlIn, int flowcontrolOut, int dataBits, int stopBits, int parity) {
+            int baudrate) {
         if ((phonenumber != null) && (phonenumber.length() > 0)) {
             throw new IllegalArgumentException("Modem with Phonenumber not implemented yet!");
         }
