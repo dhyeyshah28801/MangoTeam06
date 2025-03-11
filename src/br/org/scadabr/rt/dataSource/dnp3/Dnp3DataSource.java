@@ -24,6 +24,7 @@ public class Dnp3DataSource extends PollingDataSource {
 
     public static final int POINT_READ_EXCEPTION_EVENT = 1;
     public static final int DATA_SOURCE_EXCEPTION_EVENT = 2;
+    private static final String EVENT_EXCEPTION_KEY = "event.exception2";
 
     private DNP3Master dnp3Master;
     private final Dnp3DataSourceVO<?> vo;
@@ -45,14 +46,14 @@ public class Dnp3DataSource extends PollingDataSource {
                                 ((Dnp3PointLocatorVO) dataPoint.getVO().getPointLocator()).getIndex());
                     }
                     catch (Exception e) {
-                        raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, time, true, new LocalizableMessage("event.exception2",
+                        raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, time, true, new LocalizableMessage(EVENT_EXCEPTION_KEY,
                                 vo.getName(), e.getMessage()));
                     }
                 }
             }
             catch (Exception e) {
                 raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, time, true,
-                        new LocalizableMessage("event.exception2", vo.getName(), e.getMessage()));
+                        new LocalizableMessage(EVENT_EXCEPTION_KEY, vo.getName(), e.getMessage()));
             }
         }
 
@@ -61,7 +62,7 @@ public class Dnp3DataSource extends PollingDataSource {
             returnToNormal(DATA_SOURCE_EXCEPTION_EVENT, time);
         }
         catch (Exception e) {
-            raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, time, true, new LocalizableMessage("event.exception2",
+            raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, time, true, new LocalizableMessage(EVENT_EXCEPTION_KEY,
                     vo.getName(), e.getMessage()));
         }
 
@@ -72,7 +73,7 @@ public class Dnp3DataSource extends PollingDataSource {
             }
             catch (Exception e) {
                 raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, time, true,
-                        new LocalizableMessage("event.exception2", vo.getName(), e.getMessage()));
+                        new LocalizableMessage(EVENT_EXCEPTION_KEY, vo.getName(), e.getMessage()));
             }
 
             if (dnpElementScada != null) {
@@ -108,7 +109,7 @@ public class Dnp3DataSource extends PollingDataSource {
         }
         catch (Exception e) {
             raiseEvent(DATA_SOURCE_EXCEPTION_EVENT, System.currentTimeMillis(), true, new LocalizableMessage(
-                    "event.exception2", vo.getName(), e.getMessage()));
+                    EVENT_EXCEPTION_KEY, vo.getName(), e.getMessage()));
             // TODO parar datasource
             LOG.debug("Error while initializing data source", e);
             return;

@@ -399,8 +399,7 @@ public class Common {
                         + "Use 'NONE' for no hashing.");
             md.update(plaintext.getBytes(UTF8_CS));
             byte raw[] = md.digest();
-            String hash = new String(Base64.encodeBase64(raw));
-            return hash;
+            return (new String(Base64.encodeBase64(raw)));
         }
         catch (NoSuchAlgorithmException e) {
             // Should never happen, so just wrap in a runtime exception and rethrow
